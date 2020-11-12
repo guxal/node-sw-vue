@@ -10,11 +10,11 @@ var characterSchema = new Schema({
     type: String,
     required: true
   },
-  hairColor: {
+  hair_color: {
     type: String,
     required: true
   },
-  homeWorld: {
+  home_world: {
     type: String,
     required: true
   }

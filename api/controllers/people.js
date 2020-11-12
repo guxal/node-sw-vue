@@ -48,8 +48,8 @@ module.exports = {
         var people = new peopleModel({
             name : req.body.name,
             weight : req.body.weight,
-            hairColor : req.body.hairColor,
-            homeWorld : req.body.homeWorld
+            hair_color : req.body.hair_color,
+            home_world : req.body.home_world
         });
  
         people.save(function(err, people){
@@ -86,8 +86,8 @@ module.exports = {
  
             people.name =  req.body.name ? req.body.name : people.name;
             people.weight =  req.body.weight ? req.body.weight : people.weight;
-            people.hairColor =  req.body.hairColor ? req.body.hairColor : people.hairColor;
-            people.homeWorld =  req.body.homeWorld ? req.body.homeWorld : people.homeWorld;
+            people.hair_color =  req.body.hair_color ? req.body.hair_color : people.hair_color;
+            people.home_world =  req.body.home_world ? req.body.home_world : people.home_world;
             
             people.save(function(err, people){
                 if(err) {
