@@ -1,39 +1,37 @@
 <template>
-  <!--<ul>
-    <li v-for="product in products" :key="product.id">
-      {{ product.title }} - {{ product.price | currency }}
-      <br />
-      <button :disabled="!product.inventory" @click="addProductToCart(product)">
-        Add to cart
-      </button>
-    </li>
-  </ul>-->
-
   <v-sheet rounded="lg">
-    <!--  -->
-
     <v-row>
       <v-col v-for="card in cards" :key="card" cols="12" class="pa-0">
         <v-card>
           <v-subheader>{{ card }}</v-subheader>
 
           <v-list two-line>
-            <template v-for="n in 6">
-              <v-list-item :key="n">
+            <template v-for="(person, index) in personList">
+              <v-list-item :key="person._id">
                 <v-list-item-avatar color="grey darken-1"> </v-list-item-avatar>
 
                 <v-list-item-content>
-                  <v-list-item-title>Message {{ n }}</v-list-item-title>
+                  <v-list-item-title
+                    ><b>Name:</b> <i>{{ person.name }}</i></v-list-item-title
+                  >
 
                   <v-list-item-subtitle>
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                    Nihil repellendus distinctio similique
+                    <strong>Weight:</strong> {{ person.weight }} | &nbsp;
+                    <strong>Hair Color:</strong> {{ person.hair_color }} |
+                    &nbsp; <strong>Home World:</strong> {{ person.home_world }}
                   </v-list-item-subtitle>
                 </v-list-item-content>
 
                 <v-list-item-action>
-                  <v-btn-toggle v-model="toggle_exclusive" multiple>
-                    <v-btn fab dark small color="primary" value="recent">
+                  <v-btn-toggle multiple>
+                    <v-btn
+                      fab
+                      dark
+                      small
+                      color="primary"
+                      value="edit"
+                      @click="editPerson(person)"
+                    >
                       <v-icon>mdi-pencil</v-icon>
                     </v-btn>
 
@@ -43,7 +41,8 @@
                       dark
                       small
                       color="red"
-                      value="favorites"
+                      value="remove"
+                      @click="deletePerson(person)"
                     >
                       <v-icon>mdi-delete</v-icon>
                     </v-btn>
@@ -51,7 +50,11 @@
                 </v-list-item-action>
               </v-list-item>
 
-              <v-divider v-if="n !== 6" :key="`divider-${n}`" inset></v-divider>
+              <v-divider
+                v-if="index !== 6"
+                :key="`divider-${index}`"
+                inset
+              ></v-divider>
             </template>
 
             <div class="text-center">
@@ -85,29 +88,24 @@ import { mapState, mapActions } from "vuex";
 export default {
   name: "PersonList",
   data: () => ({
-    select: null,
-    items: ["Item 1", "Item 2", "Item 3", "Item 4"],
-    checkbox: null,
-
     cards: ["Person"],
-    drawer: null,
-    links: [
-      ["mdi-inbox-arrow-down", "Inbox"],
-      ["mdi-send", "Send"],
-      ["mdi-delete", "Trash"],
-      ["mdi-alert-octagon", "Spam"]
-    ],
     page: 1
   }),
 
-  computed: mapState({
-    person: state => state.person.all
+  computed: mapState("person", {
+    personList: state => state.person
   }),
 
-  methods: mapActions(["getAllPerson"]),
+  methods: {
+    ...mapActions(["getAllPerson", "removePerson"]),
+    deletePerson(person) {
+      this.$store.dispatch("person/removePerson", person._id);
+    }
+  },
 
   created() {
     this.$store.dispatch("person/getAllPerson");
+    console.log(this.personList);
   }
   // computed: {
   //   ...mapState({

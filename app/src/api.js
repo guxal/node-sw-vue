@@ -36,7 +36,7 @@ export default {
     return axios.put(`${apiUrl}/people`, person);
   },
   async getAllPerson() {
-    console.log(apiUrl)
+    console.log(apiUrl);
     return axios.get(`${apiUrl}/people`);
   },
   async createPerson(person) {

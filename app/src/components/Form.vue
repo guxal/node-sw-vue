@@ -112,6 +112,7 @@ import {
   ValidationProvider,
   setInteractionMode
 } from "vee-validate";
+import { mapActions } from "vuex";
 
 setInteractionMode("eager");
 
@@ -143,8 +144,18 @@ export default {
     home_world: ""
   }),
   methods: {
+    ...mapActions("form", ["createPerson"]),
     submit() {
       this.$refs.observer.validate();
+      // console.log(this.$data);
+      // let data = {
+      //     "name": this.name,
+      //     "weight" : this.weight,
+      //     "hair_color": this.hair_color,
+      //     "home_world": this.home_world
+      // }
+      // console.log(data);
+      this.createPerson(this.$data);
     },
     clear() {
       this.name = "";

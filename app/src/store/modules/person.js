@@ -11,17 +11,12 @@ const getters = {};
 // actions
 const actions = {
   async getAllPerson({ commit }) {
-    // console.log('getall');
-    // await api.getAllPerson(products => {
-    //   console.log(products)
-    //   commit("setAllPerson", products);
-    // });
-
     try {
       const response = await api.getAllPerson();
       if (response) {
-        console.log(response);
-        commit("setAllPerson", response.data);
+        console.log(response.data);
+        let data = response.data;
+        commit("setAllPerson", data);
       }
     } catch (error) {
       console.log(error);
@@ -29,19 +24,37 @@ const actions = {
       // rollback to the person save before get the reques
     }
   },
-  removePerson() {}
+  async removePerson({ commit }, id) {
+    console.log(id);
+    try {
+      const response = await api.deletePerson(id);
+      if (response) {
+        let data = response.data;
+        let id = data._id;
+        commit("deletePerson", { id: id });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
 };
 
 // mutations
 const mutations = {
   setAllPerson(state, person) {
+    console.log(state);
+    console.log(person);
     state.person = person;
+    console.log(state);
   },
-  setPerson(state, { person }) {
+  setPerson(state, person) {
+    console.log(person);
     state.person.push(person);
   },
-  deletePerson(state, { id }) {
-    state.person = state.person.find(person => person._id !== id);
+  deletePerson(state, { todo, id = todo.id }) {
+    console.log(id);
+    let index = state.person.findIndex(person => person._id == id);
+    state.person.splice(index, 1);
   },
   editPerson(state, { person, id }) {
     state.person = state.person.find(person => person._id !== id);
