@@ -32,8 +32,8 @@ export default {
   async getPerson(id) {
     return axios.get(`${apiUrl}/people/${id}`);
   },
-  async updatePerson(person) {
-    return axios.put(`${apiUrl}/people`, person);
+  async updatePerson(person, id) {
+    return axios.put(`${apiUrl}/people/${id}`, person);
   },
   async getAllPerson() {
     console.log(apiUrl);

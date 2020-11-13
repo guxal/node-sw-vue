@@ -56,8 +56,9 @@ const mutations = {
     let index = state.person.findIndex(person => person._id == id);
     state.person.splice(index, 1);
   },
-  editPerson(state, { person, id }) {
-    state.person = state.person.find(person => person._id !== id);
+  editPerson(state, { person, id = person._id }) {
+    let index = state.person.findIndex(person => person._id == id);
+    state.person.splice(index, 1);
     state.person.push(person);
   }
 };

@@ -74,7 +74,7 @@
 </template>
 
 <script>
-import { mapState, mapActions } from "vuex";
+import { mapState, mapActions, mapMutations } from "vuex";
 // export default {
 //   computed: mapState({
 //     products: state => state.products.all
@@ -97,9 +97,13 @@ export default {
   }),
 
   methods: {
+    ...mapMutations(["form/setData"]),
     ...mapActions(["getAllPerson", "removePerson"]),
     deletePerson(person) {
       this.$store.dispatch("person/removePerson", person._id);
+    },
+    editPerson(person) {
+      this.$store.commit("form/setData", person);
     }
   },
 

@@ -39,7 +39,7 @@
           rules="required|max:20"
         >
           <v-text-field
-            v-model="name"
+            v-model="form_data.name"
             :counter="20"
             :error-messages="errors"
             label="Name"
@@ -48,7 +48,7 @@
         </validation-provider>
         <validation-provider v-slot="{ errors }" name="weight" rules="required">
           <v-text-field
-            v-model="weight"
+            v-model="form_data.weight"
             :error-messages="errors"
             label="Weight"
             required
@@ -60,7 +60,7 @@
           rules="required"
         >
           <v-text-field
-            v-model="hair_color"
+            v-model="form_data.hair_color"
             :error-messages="errors"
             label="Hair Color"
             required
@@ -72,15 +72,19 @@
           name="home_world"
         >
           <v-text-field
-            v-model="home_world"
+            v-model="form_data.home_world"
             :error-messages="errors"
             label="Home World"
             required
           ></v-text-field>
         </validation-provider>
 
-        <v-btn class="mr-4" type="submit" :disabled="invalid">
+        <v-btn class="mr-4" type="submit" :disabled="invalid" v-if="update">
           create
+        </v-btn>
+
+        <v-btn class="mr-4" type="submit" :disabled="invalid" v-if="!update">
+          update
         </v-btn>
         <v-btn @click="clear">
           clear
@@ -112,7 +116,7 @@ import {
   ValidationProvider,
   setInteractionMode
 } from "vee-validate";
-import { mapActions } from "vuex";
+import { mapMutations, mapState, mapActions } from "vuex";
 
 setInteractionMode("eager");
 
@@ -138,13 +142,22 @@ export default {
     ValidationObserver
   },
   data: () => ({
-    name: "",
-    weight: "",
-    hair_color: "",
-    home_world: ""
+    //form_data: {
+    //  name: "",
+    //  weight: "",
+    //  hair_color: "",
+    //  home_world: ""
+    //}
+  }),
+  computed: mapState("form", {
+    form_data: state => state.data,
+    update: state => {
+      return state.data._id == "";
+    }
   }),
   methods: {
-    ...mapActions("form", ["createPerson"]),
+    ...mapMutations(["form/clearData"]),
+    ...mapActions("form", ["createPerson", "updatePerson"]),
     submit() {
       this.$refs.observer.validate();
       // console.log(this.$data);
@@ -155,14 +168,14 @@ export default {
       //     "home_world": this.home_world
       // }
       // console.log(data);
-      this.createPerson(this.$data);
+      if (this.form_data._id != "")
+        this.updatePerson({ person: this.form_data, id: this.form_data._id });
+      else this.createPerson(this.form_data);
     },
     clear() {
-      this.name = "";
-      this.weight = "";
-      this.hair_color = "";
-      this.home_world = "";
-      this.$refs.observer.reset();
+      console.log("clear");
+      this.$store.commit("form/clearData");
+      // .$refs.observer.reset();
     }
   }
   // computed: {
